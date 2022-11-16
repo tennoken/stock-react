@@ -1,12 +1,12 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import StockMain from './pages/StockOverview';
+import StockOverview from './pages/StockOverview';
 import StockDetail from './pages/StockDetail';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <StockMain />,
+        element: <StockOverview />,
         errorElement: <p>Error !</p>,
     },
     {

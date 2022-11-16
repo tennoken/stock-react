@@ -1,6 +1,6 @@
 import React from 'react';
-import StockList from '../components/StockList';
+import AutoComplete from '../components/AutoComplete';
 
-export default function StockMain() {
-    return <StockList />;
+export default function StockOverview() {
+    return <AutoComplete />;
 }
