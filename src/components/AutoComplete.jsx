@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import finnHub from '../apis/finnHub';
 
 export default function AutoComplete() {
@@ -27,21 +27,38 @@ export default function AutoComplete() {
                 } catch (err) {}
             };
             fetchData();
-        }, 600);
+        }, 300);
     };
 
     return (
-        <>
-            <input type="text" ref={inputRef} onChange={handleDebounceSearch} />
-            <ul>
+        <div className="w-96">
+            <label
+                htmlFor="symbol"
+                className="block text-sm font-medium text-gray-700"
+            >
+                Stock Symbol
+            </label>
+            <input
+                name="symbol"
+                id="symbol"
+                className="border-2 border-sky-400 w-96 rounded-md py-2 pl-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                type="text"
+                placeholder="Search Stock Symbol..."
+                ref={inputRef}
+                onChange={handleDebounceSearch}
+            />
+            <ul className="h-80 overflow-auto">
                 {results.map((result) => {
                     return (
-                        <li key={result.symbol}>
+                        <li
+                            className="my-1 border-2 w-94 cursor-pointer hover:bg-sky-100"
+                            key={result.symbol}
+                        >
                             {result.description}({result.displaySymbol})
                         </li>
                     );
                 })}
             </ul>
-        </>
+        </div>
     );
 }
