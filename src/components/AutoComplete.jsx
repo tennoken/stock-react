@@ -1,10 +1,35 @@
 import React, { useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import finnHub from '../apis/finnHub';
 
-export default function AutoComplete() {
+export default function AutoComplete({ handleAdd }) {
     const inputRef = useRef();
     const timeOut = useRef();
     const [results, setResults] = useState([]);
+
+    const onClickSymbol = (symbol) => {
+        const fetchData = async () => {
+            try {
+                const res = await finnHub.get('/quote', {
+                    params: {
+                        symbol,
+                    },
+                });
+                handleAdd({
+                    id: uuidv4(),
+                    symbol,
+                    c: res.data.c,
+                    o: res.data.o,
+                    h: res.data.h,
+                    l: res.data.l,
+                    pc: res.data.pc,
+                });
+            } catch (err) {}
+        };
+        fetchData();
+        inputRef.current.value = '';
+        setResults([]);
+    };
 
     const handleDebounceSearch = (e) => {
         clearTimeout(timeOut.current);
@@ -51,6 +76,7 @@ export default function AutoComplete() {
                 {results.map((result) => {
                     return (
                         <li
+                            onClick={() => onClickSymbol(result.displaySymbol)}
                             className="my-1 border-2 w-94 cursor-pointer hover:bg-sky-100"
                             key={result.symbol}
                         >
