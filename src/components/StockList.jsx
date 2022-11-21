@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function StockList({ lists }) {
-    console.log(lists);
     return (
         <table className="border-separate">
             <thead className="bg-sky-200 ">

@@ -52,7 +52,12 @@ export default function AutoComplete({ handleAdd }) {
                 } catch (err) {}
             };
             fetchData();
-        }, 300);
+        }, 200);
+    };
+
+    const handleInputFocusOut = () => {
+        setResults([]);
+        inputRef.current.value = '';
     };
 
     return (
@@ -71,6 +76,7 @@ export default function AutoComplete({ handleAdd }) {
                 placeholder="Search Stock Symbol..."
                 ref={inputRef}
                 onChange={handleDebounceSearch}
+                onBlur={handleInputFocusOut}
             />
             <ul className="h-80 overflow-auto">
                 {results.map((result) => {
