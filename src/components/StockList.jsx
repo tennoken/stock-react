@@ -1,6 +1,14 @@
 import React from 'react';
+import { FiTrash2 } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
-export default function StockList({ lists }) {
+export default function StockList({ lists, handleRemove }) {
+    const navigate = useNavigate();
+
+    const goToDetail = (symbol) => {
+        navigate(`/detail/${symbol}`);
+    };
+
     return (
         <table className="border-separate">
             <thead className="bg-sky-200 ">
@@ -25,6 +33,7 @@ export default function StockList({ lists }) {
                         Low price <br />
                         of the day
                     </th>
+                    <th className="p-4">Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +42,7 @@ export default function StockList({ lists }) {
                         <tr
                             key={stock.id}
                             className="hover:bg-sky-100 cursor-pointer my-6"
+                            onClick={() => goToDetail(stock.symbol)}
                         >
                             <td className="text-center">{stock.symbol}</td>
                             <td className="text-center">{stock.c}</td>
@@ -40,6 +50,11 @@ export default function StockList({ lists }) {
                             <td className="text-center">{stock.pc}</td>
                             <td className="text-center">{stock.h}</td>
                             <td className="text-center">{stock.l}</td>
+                            <td className="text-center hover:bg-sky-500 hover:text-white ">
+                                <button onClick={() => handleRemove(stock.id)}>
+                                    <FiTrash2 />
+                                </button>
+                            </td>
                         </tr>
                     );
                 })}

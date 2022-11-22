@@ -1,5 +1,8 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 export default function StockDetail() {
-    return <div>StockDetail</div>;
+    const { symbol } = useParams();
+
+    return <div>StockDetail {symbol}</div>;
 }

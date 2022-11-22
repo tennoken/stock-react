@@ -9,6 +9,10 @@ export default function StockOverview() {
         setLists((prev) => [...lists, stock]);
     };
 
+    const handleRemove = (id) => {
+        setLists(lists.filter((item) => item.id !== id));
+    };
+
     useEffect(() => {
         localStorage.setItem('lists', JSON.stringify(lists));
     }, [lists]);
@@ -16,7 +20,7 @@ export default function StockOverview() {
     return (
         <main className="w-full h-screen flex flex-col justify-center items-center">
             <AutoComplete handleAdd={handleAdd} />
-            <StockList lists={lists} />
+            <StockList lists={lists} handleRemove={handleRemove} />
         </main>
     );
 }

@@ -56,8 +56,10 @@ export default function AutoComplete({ handleAdd }) {
     };
 
     const handleInputFocusOut = () => {
-        setResults([]);
-        inputRef.current.value = '';
+        setTimeout(() => {
+            setResults([]);
+            inputRef.current.value = '';
+        }, 100);
     };
 
     return (
