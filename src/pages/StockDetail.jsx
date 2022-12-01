@@ -7,7 +7,6 @@ export default function StockDetail() {
     const date = new Date();
     const currentTime = Math.floor(date.getTime() / 1000);
     let oneDay = currentTime - 2 * 24 * 60 * 60;
-    console.log(currentTime, oneDay);
 
     useEffect(() => {
         const fetchData = async () => {

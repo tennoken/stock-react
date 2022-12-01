@@ -9,7 +9,8 @@ export default function StockOverview() {
         setLists((prev) => [...lists, stock]);
     };
 
-    const handleRemove = (id) => {
+    const handleRemove = (id, e) => {
+        e.stopPropagation();
         setLists(lists.filter((item) => item.id !== id));
     };
 

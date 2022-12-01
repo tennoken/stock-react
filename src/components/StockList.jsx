@@ -41,7 +41,7 @@ export default function StockList({ lists, handleRemove }) {
                     return (
                         <tr
                             key={stock.id}
-                            className="hover:bg-sky-100 cursor-pointer my-6"
+                            className="hover:bg-sky-100 cursor-pointer my-6 z-1"
                             onClick={() => goToDetail(stock.symbol)}
                         >
                             <td className="text-center">{stock.symbol}</td>
@@ -50,9 +50,12 @@ export default function StockList({ lists, handleRemove }) {
                             <td className="text-center">{stock.pc}</td>
                             <td className="text-center">{stock.h}</td>
                             <td className="text-center">{stock.l}</td>
-                            <td className="text-center hover:bg-sky-500 hover:text-white ">
-                                <button onClick={() => handleRemove(stock.id)}>
-                                    <FiTrash2 />
+                            <td className="text-center hover:bg-sky-500 hover:text-white z-10">
+                                <button
+                                    className="w-full"
+                                    onClick={(e) => handleRemove(stock.id, e)}
+                                >
+                                    <FiTrash2 className="inline" />
                                 </button>
                             </td>
                         </tr>
