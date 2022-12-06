@@ -9,6 +9,12 @@ export default function StockOverview() {
         setLists((prev) => [...lists, stock]);
     };
 
+    const handleUpdate = (id) => {
+        // localstorage에 있는 symbol의 price를 업데이트 해줄꺼
+        const filtetedStock = lists.filter((item) => item.id === id);
+        console.log(filtetedStock);
+    };
+
     const handleRemove = (id, e) => {
         e.stopPropagation();
         setLists(lists.filter((item) => item.id !== id));
@@ -21,7 +27,11 @@ export default function StockOverview() {
     return (
         <main className="w-full h-screen flex flex-col justify-center items-center">
             <AutoComplete handleAdd={handleAdd} />
-            <StockList lists={lists} handleRemove={handleRemove} />
+            <StockList
+                lists={lists}
+                handleUpdate={handleUpdate}
+                handleRemove={handleRemove}
+            />
         </main>
     );
 }

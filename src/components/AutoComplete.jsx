@@ -19,6 +19,8 @@ export default function AutoComplete({ handleAdd }) {
                     id: uuidv4(),
                     symbol,
                     c: res.data.c,
+                    d: res.data.d,
+                    dp: res.data.dp,
                     o: res.data.o,
                     h: res.data.h,
                     l: res.data.l,

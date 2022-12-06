@@ -1,9 +1,13 @@
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import finnHub from '../apis/finnHub';
 
-export default function StockList({ lists, handleRemove }) {
+export default function StockList({ lists, handleUpdate, handleRemove }) {
     const navigate = useNavigate();
+    const [watchList, setWatchList] = useState([]);
 
     const goToDetail = (symbol) => {
         navigate(`/detail/${symbol}`);
@@ -41,7 +45,7 @@ export default function StockList({ lists, handleRemove }) {
                     return (
                         <tr
                             key={stock.id}
-                            className="hover:bg-sky-100 cursor-pointer my-6 z-1"
+                            className="hover:bg-sky-100 cursor-pointer my-6"
                             onClick={() => goToDetail(stock.symbol)}
                         >
                             <td className="text-center">{stock.symbol}</td>
@@ -50,7 +54,7 @@ export default function StockList({ lists, handleRemove }) {
                             <td className="text-center">{stock.pc}</td>
                             <td className="text-center">{stock.h}</td>
                             <td className="text-center">{stock.l}</td>
-                            <td className="text-center hover:bg-sky-500 hover:text-white z-10">
+                            <td className="text-center hover:bg-sky-500 hover:text-white">
                                 <button
                                     className="w-full"
                                     onClick={(e) => handleRemove(stock.id, e)}
