@@ -49,14 +49,17 @@ export default function AutoComplete({ handleAdd }) {
                             q: inputRef.current.value,
                         },
                     });
-
-                    setResults(res.data.result);
+                    const filteredRes = res.data.result.filter(
+                        (item) => !item.displaySymbol.includes('.')
+                    );
+                    setResults(filteredRes);
                 } catch (err) {}
             };
             fetchData();
         }, 200);
     };
 
+    // 검색 창에서 focus out 시, 검색어 초기화
     const handleInputFocusOut = () => {
         setTimeout(() => {
             setResults([]);
