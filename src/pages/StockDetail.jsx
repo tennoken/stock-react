@@ -20,6 +20,7 @@ const formatData = (data) => {
 export default function StockDetail() {
     const { symbol } = useParams();
     const [priceData, setPriceData] = useState([]);
+    const [stockDetailData, setStockDetailData] = useState({});
     const date = new Date();
 
     const currentTime = Math.round(date.getTime() / 1000);
@@ -36,8 +37,10 @@ export default function StockDetail() {
     const oneWeeks = currentTime - 7 * 24 * 60 * 60;
     const oneYear = currentTime - 365 * 24 * 60 * 60;
 
+    console.log(stockDetailData);
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchStockPrice = async () => {
             try {
                 const response = await finnHub.get('/stock/candle', {
                     params: {
@@ -50,7 +53,27 @@ export default function StockDetail() {
                 setPriceData(formatData(response.data));
             } catch (e) {}
         };
-        fetchData();
+        const fetchStockData = async () => {
+            try {
+                const response = await finnHub.get('/stock/metric', {
+                    params: {
+                        symbol: symbol,
+                        metric: 'all',
+                    },
+                });
+                const metric = await response.data.metric;
+                console.log('stock metric : ', metric);
+                setStockDetailData({
+                    '52WeekHigh': metric['52WeekHigh'],
+                    '52WeekLow': metric['52WeekLow'],
+                    grossMarginTTM: metric.grossMarginTTM,
+                    grossMarginAnnual: metric.grossMarginAnnual,
+                    bookValuePerShareAnnual: metric.bookValuePerShareAnnual,
+                });
+            } catch (e) {}
+        };
+        fetchStockPrice();
+        fetchStockData();
     }, []);
 
     const chartData = {
@@ -89,6 +112,13 @@ export default function StockDetail() {
                 type="candlestick"
                 height={500}
             />
+            <div class="p-5">
+                {Object.keys(stockDetailData).map((key) => (
+                    <li class="list-none">
+                        {key} : {stockDetailData[key]}
+                    </li>
+                ))}
+            </div>
         </div>
     );
 }
