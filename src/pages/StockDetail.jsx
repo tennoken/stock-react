@@ -19,7 +19,13 @@ const formatData = (data) => {
 
 const StockDetail = () => {
     const { symbol } = useParams();
-    const [priceData, setPriceData] = useState([]);
+    const filter = ['oneDayPriceData', 'oneWeekPriceData', 'oneYearPriceData'];
+    const [selectedPeriod, setSelectedPeriod] = useState('oneDayPriceData');
+    const [priceData, setPriceData] = useState({
+        oneDayPriceData: [],
+        oneWeekPriceData: [],
+        oneYearPriceData: [],
+    });
     const [stockDetailData, setStockDetailData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const date = new Date();
@@ -38,22 +44,80 @@ const StockDetail = () => {
     const oneWeeks = currentTime - 7 * 24 * 60 * 60;
     const oneYear = currentTime - 365 * 24 * 60 * 60;
 
+    const filterDate = (value) => {
+        return priceData[value];
+    };
+
+    const chartData = {
+        chart: {
+            type: 'candlestick',
+        },
+        title: {
+            align: 'center',
+        },
+        xaxis: {
+            type: 'category',
+            labels: {
+                formatter: function (value) {
+                    return dayjs(value).format('MMM DD HH:mm');
+                },
+            },
+        },
+        yaxis: {
+            tooltip: {
+                enabled: true,
+            },
+        },
+        series: [
+            {
+                data: priceData[selectedPeriod],
+            },
+        ],
+    };
+
     useEffect(() => {
         setIsLoading(true);
-        const fetchStockPrice = async () => {
-            try {
-                const response = await finnHub.get('/stock/candle', {
-                    params: {
-                        symbol: symbol,
-                        resolution: 30,
-                        from: oneDay,
-                        to: currentTime,
-                    },
-                });
-                setPriceData(formatData(response.data));
-                setIsLoading(false);
-            } catch (e) {}
-        };
+        Promise.all([
+            finnHub.get('/stock/candle', {
+                params: {
+                    symbol: symbol,
+                    resolution: 30,
+                    from: oneDay,
+                    to: currentTime,
+                },
+            }),
+            finnHub.get('/stock/candle', {
+                params: {
+                    symbol: symbol,
+                    resolution: 60,
+                    from: oneWeeks,
+                    to: currentTime,
+                },
+            }),
+            finnHub.get('/stock/candle', {
+                params: {
+                    symbol: symbol,
+                    resolution: 'D',
+                    from: oneYear,
+                    to: currentTime,
+                },
+            }),
+        ]).then((res) => {
+            setPriceData((prev) => ({
+                ...prev,
+                oneDayPriceData: formatData(res[0].data),
+            }));
+            setPriceData((prev) => ({
+                ...prev,
+                oneWeekPriceData: formatData(res[1].data),
+            }));
+            setPriceData((prev) => ({
+                ...prev,
+                oneYearPriceData: formatData(res[2].data),
+            }));
+            setIsLoading(false);
+        });
+
         const fetchStockData = async () => {
             try {
                 const response = await finnHub.get('/stock/metric', {
@@ -80,36 +144,8 @@ const StockDetail = () => {
                 });
             } catch (e) {}
         };
-        fetchStockPrice();
         fetchStockData();
     }, []);
-
-    const chartData = {
-        chart: {
-            type: 'candlestick',
-        },
-        title: {
-            align: 'center',
-        },
-        xaxis: {
-            type: 'category',
-            labels: {
-                formatter: function (value) {
-                    return dayjs(value).format('MMM DD HH:mm');
-                },
-            },
-        },
-        yaxis: {
-            tooltip: {
-                enabled: true,
-            },
-        },
-        series: [
-            {
-                data: priceData,
-            },
-        ],
-    };
 
     if (isLoading)
         return (
@@ -136,14 +172,24 @@ const StockDetail = () => {
         );
 
     return (
-        <div>
-            <h1>StockDetail {symbol}</h1>
+        <div className="mx-4">
+            <h1 className="text-2xl">{symbol}</h1>
             <Chart
                 options={chartData}
                 series={chartData.series}
                 type="candlestick"
                 height={500}
             />
+            <div className="mx-4">
+                {filter.map((period) => (
+                    <button
+                        className="mr-5 border-solid border-2 border-sky-500 rounded p-2"
+                        onClick={() => setSelectedPeriod(period)}
+                    >
+                        {period}
+                    </button>
+                ))}
+            </div>
             <div className="p-5">
                 {Object.keys(stockDetailData).map((key) => (
                     <li key={key} className="list-none">
@@ -155,4 +201,4 @@ const StockDetail = () => {
     );
 };
 
-export default React.memo(StockDetail);
+export default StockDetail;
