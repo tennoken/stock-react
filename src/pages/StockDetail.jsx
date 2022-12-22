@@ -19,12 +19,12 @@ const formatData = (data) => {
 
 const StockDetail = () => {
     const { symbol } = useParams();
-    const filter = ['oneDayPriceData', 'oneWeekPriceData', 'oneYearPriceData'];
-    const [selectedPeriod, setSelectedPeriod] = useState('oneDayPriceData');
+    const filter = ['1D', '1W', '1Y'];
+    const [selectedPeriod, setSelectedPeriod] = useState('1D');
     const [priceData, setPriceData] = useState({
-        oneDayPriceData: [],
-        oneWeekPriceData: [],
-        oneYearPriceData: [],
+        '1D': [],
+        '1W': [],
+        '1Y': [],
     });
     const [stockDetailData, setStockDetailData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,7 @@ const StockDetail = () => {
             type: 'category',
             labels: {
                 formatter: function (value) {
-                    return dayjs(value).format('MMM DD HH:mm');
+                    return dayjs(value).format('YY MMM DD HH:mm');
                 },
             },
         },
@@ -105,15 +105,15 @@ const StockDetail = () => {
         ]).then((res) => {
             setPriceData((prev) => ({
                 ...prev,
-                oneDayPriceData: formatData(res[0].data),
+                '1D': formatData(res[0].data),
             }));
             setPriceData((prev) => ({
                 ...prev,
-                oneWeekPriceData: formatData(res[1].data),
+                '1W': formatData(res[1].data),
             }));
             setPriceData((prev) => ({
                 ...prev,
-                oneYearPriceData: formatData(res[2].data),
+                '1Y': formatData(res[2].data),
             }));
             setIsLoading(false);
         });
@@ -184,6 +184,7 @@ const StockDetail = () => {
                 {filter.map((period) => (
                     <button
                         className="mr-5 border-solid border-2 border-sky-500 rounded p-2"
+                        key={period}
                         onClick={() => setSelectedPeriod(period)}
                     >
                         {period}
