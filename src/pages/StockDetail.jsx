@@ -59,13 +59,13 @@ const StockDetail = () => {
             type: 'category',
             labels: {
                 formatter: function (value) {
-                    return dayjs(value).format('YY MMM DD HH:mm');
+                    return dayjs(value).format('YYYY MMM DD HH:mm');
                 },
             },
         },
         yaxis: {
             tooltip: {
-                enabled: true,
+                enabled: false,
             },
         },
         series: [
@@ -127,20 +127,16 @@ const StockDetail = () => {
                     },
                 });
                 const metric = await response.data.metric;
+                console.log(metric);
                 setStockDetailData({
-                    marketCapitalization: metric.marketCapitalization,
-                    epsGrowthQuarterlyYoy: metric.epsGrowthQuarterlyYoy,
-                    epsGrowthTTMYoy: metric.epsGrowthTTMYoy,
-                    grossMargin5Y: metric.grossMargin5Y,
-                    grossMarginAnnual: metric.grossMarginAnnual,
-                    grossMarginTTM: metric.grossMarginTTM,
-                    netIncomeEmployeeAnnual: metric.netIncomeEmployeeAnnual,
-                    netIncomeEmployeeTTM: metric.netIncomeEmployeeTTM,
-                    bookValuePerShareAnnual: metric.bookValuePerShareAnnual,
-                    '52WeekHigh': metric['52WeekHigh'],
-                    '52WeekHighDate': metric['52WeekHighDate'],
-                    '52WeekLow': metric['52WeekLow'],
-                    '52WeekLowDate': metric['52WeekLowDate'],
+                    시가총액: metric.marketCapitalization,
+                    '매출총이익 (TTM)': metric.grossMarginTTM,
+                    '영업이익률 (TTM)': metric.operatingMarginTTM,
+                    '순이익률 (TTM)': metric.netProfitMarginTTM,
+                    '52주 최고가': metric['52WeekHigh'],
+                    '52주 최고가 일': metric['52WeekHighDate'],
+                    '52주 최저가': metric['52WeekLow'],
+                    '52주 최저가 일': metric['52WeekLowDate'],
                 });
             } catch (e) {}
         };
@@ -172,8 +168,8 @@ const StockDetail = () => {
         );
 
     return (
-        <div className="mx-4">
-            <h1 className="text-2xl">{symbol}</h1>
+        <div className="p-4">
+            <h1 className="text-3xl">{symbol}</h1>
             <Chart
                 options={chartData}
                 series={chartData.series}
@@ -183,7 +179,9 @@ const StockDetail = () => {
             <div className="mx-4">
                 {filter.map((period) => (
                     <button
-                        className="mr-5 border-solid border-2 border-sky-500 rounded p-2"
+                        className={`mr-5 border-solid border-2 border-sky-500 rounded p-2 hover:bg-sky-100 ${
+                            selectedPeriod === period ? 'bg-sky-300' : ''
+                        }`}
                         key={period}
                         onClick={() => setSelectedPeriod(period)}
                     >
@@ -192,11 +190,17 @@ const StockDetail = () => {
                 ))}
             </div>
             <div className="p-5">
-                {Object.keys(stockDetailData).map((key) => (
-                    <li key={key} className="list-none">
-                        {key} : {stockDetailData[key]}
-                    </li>
-                ))}
+                <dl className="grid grid-cols-4 gap-4">
+                    {Object.keys(stockDetailData).map((key) => (
+                        <div
+                            key={key}
+                            className="flex justify-between border-black border-b pb-2 "
+                        >
+                            <dt>{key}</dt>
+                            <dd>{stockDetailData[key]}</dd>
+                        </div>
+                    ))}
+                </dl>
             </div>
         </div>
     );
