@@ -30,6 +30,7 @@ const StockDetail = () => {
     const [isLoading, setIsLoading] = useState(false);
     const date = new Date();
     const currentTime = Math.round(date.getTime() / 1000);
+    console.log(date.getDay());
     let oneDay;
     if (date.getDay() === 0) {
         // getDay() 6 : 한국 토요일, 0 : 미국 토요일
@@ -37,15 +38,17 @@ const StockDetail = () => {
     } else if (date.getDay() === 1) {
         // 0 한국 일요일, 1 미국 일요일
         oneDay = currentTime - 3 * 24 * 60 * 60;
+    } else if (date.getDay() === 2) {
+        oneDay = currentTime - 4 * 24 * 60 * 60;
     } else {
         oneDay = currentTime - 24 * 60 * 60;
     }
     const oneWeeks = currentTime - 7 * 24 * 60 * 60;
     const oneYear = currentTime - 365 * 24 * 60 * 60;
 
-    const filterDate = (value) => {
-        return priceData[value];
-    };
+    // const filterDate = (value) => {
+    //     return priceData[value];
+    // };
 
     const chartData = {
         chart: {
@@ -106,6 +109,7 @@ const StockDetail = () => {
                 ...prev,
                 '1D': formatData(res[0].data),
             }));
+            setIsLoading(false);
             setPriceData((prev) => ({
                 ...prev,
                 '1W': formatData(res[1].data),
@@ -114,7 +118,6 @@ const StockDetail = () => {
                 ...prev,
                 '1Y': formatData(res[2].data),
             }));
-            setIsLoading(false);
         });
 
         const fetchStockData = async () => {
@@ -140,7 +143,7 @@ const StockDetail = () => {
             } catch (e) {}
         };
         fetchStockData();
-    }, []);
+    }, [symbol]);
 
     if (isLoading)
         return (
