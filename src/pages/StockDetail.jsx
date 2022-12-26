@@ -29,14 +29,13 @@ const StockDetail = () => {
     const [stockDetailData, setStockDetailData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const date = new Date();
-
     const currentTime = Math.round(date.getTime() / 1000);
     let oneDay;
-    if (date.getDay() === 6) {
-        // 토요일
+    if (date.getDay() === 0) {
+        // getDay() 6 : 한국 토요일, 0 : 미국 토요일
         oneDay = currentTime - 2 * 24 * 60 * 60;
-    } else if (date.getDay() === 0) {
-        // 일요일
+    } else if (date.getDay() === 1) {
+        // 0 한국 일요일, 1 미국 일요일
         oneDay = currentTime - 3 * 24 * 60 * 60;
     } else {
         oneDay = currentTime - 24 * 60 * 60;
@@ -127,9 +126,9 @@ const StockDetail = () => {
                     },
                 });
                 const metric = await response.data.metric;
-                console.log(metric);
+
                 setStockDetailData({
-                    시가총액: metric.marketCapitalization,
+                    '시가총액 ': metric.marketCapitalization,
                     '매출총이익 (TTM)': metric.grossMarginTTM,
                     '영업이익률 (TTM)': metric.operatingMarginTTM,
                     '순이익률 (TTM)': metric.netProfitMarginTTM,

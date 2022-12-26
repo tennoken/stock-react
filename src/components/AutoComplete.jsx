@@ -56,7 +56,7 @@ export default function AutoComplete({ handleAdd }) {
                 } catch (err) {}
             };
             fetchData();
-        }, 200);
+        }, 100);
     };
 
     // 검색 창에서 focus out 시, 검색어 초기화
