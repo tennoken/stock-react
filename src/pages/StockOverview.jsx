@@ -4,6 +4,7 @@ import StockList from '../components/StockList';
 
 export default function StockOverview() {
     const [lists, setLists] = useState(readLists);
+    const storedSymbols = lists.map((item) => item.symbol);
 
     const handleAdd = (stock) => {
         setLists((prev) => [...lists, stock]);
@@ -26,7 +27,7 @@ export default function StockOverview() {
 
     return (
         <main className="w-full h-screen flex flex-col justify-center items-center">
-            <AutoComplete handleAdd={handleAdd} />
+            <AutoComplete handleAdd={handleAdd} storedSymbols={storedSymbols} />
             <StockList
                 lists={lists}
                 handleUpdate={handleUpdate}

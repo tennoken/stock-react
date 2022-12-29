@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import finnHub from '../apis/finnHub';
 
-export default function AutoComplete({ handleAdd }) {
+export default function AutoComplete({ storedSymbols, handleAdd }) {
     const inputRef = useRef();
     const timeOut = useRef();
     const [results, setResults] = useState([]);
@@ -50,7 +50,9 @@ export default function AutoComplete({ handleAdd }) {
                         },
                     });
                     const filteredRes = res.data.result.filter(
-                        (item) => !item.displaySymbol.includes('.')
+                        (item) =>
+                            !item.displaySymbol.includes('.') &&
+                            !storedSymbols.includes(item.symbol)
                     );
                     setResults(filteredRes);
                 } catch (err) {}
