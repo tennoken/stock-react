@@ -1,18 +1,13 @@
 import React from 'react';
-import {
-    createBrowserRouter,
-    RouterProvider,
-    useRouteError,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import StockOverview from './pages/StockOverview';
 import StockDetail from './pages/StockDetail';
 
-const error = useRouteError();
 const router = createBrowserRouter([
     {
         path: '/',
         element: <StockOverview />,
-        errorElement: <p>{error.statusText || error.message}</p>,
+        errorElement: <p>error !</p>,
     },
     {
         path: '/detail/:symbol',
