@@ -8,7 +8,6 @@ import finnHub from '../apis/finnHub';
 export default function StockList({ lists, handleUpdate, handleRemove }) {
     const navigate = useNavigate();
     const [watchList, setWatchList] = useState([]);
-    console.log('lists : ', lists);
     const goToDetail = (symbol) => {
         navigate(`/detail/${symbol}`);
     };
