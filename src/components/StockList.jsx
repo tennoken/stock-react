@@ -9,7 +9,7 @@ export default function StockList({ lists, handleUpdate, handleRemove }) {
     const navigate = useNavigate();
     const [watchList, setWatchList] = useState([]);
     const goToDetail = (symbol) => {
-        navigate(`/detail/${symbol}`);
+        navigate(`/stock-react/detail/${symbol}`);
     };
 
     return (

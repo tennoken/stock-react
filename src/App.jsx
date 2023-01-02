@@ -6,12 +6,12 @@ import Error from './components/Error';
 
 const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/stock-react',
         element: <StockOverview />,
         errorElement: <Error />,
     },
     {
-        path: '/detail/:symbol',
+        path: '/stock-react/detail/:symbol',
         element: <StockDetail />,
     },
 ]);
