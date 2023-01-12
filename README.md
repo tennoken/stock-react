@@ -2,7 +2,6 @@
 
 ## 홈페이지 : <a href="https://tennoken.github.io/stock-react/" target="_blank">https://tennoken.github.io/stock-react/</a>
 
----
 
 ### Project Stack
 
